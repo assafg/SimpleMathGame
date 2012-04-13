@@ -31,12 +31,14 @@ var MathGame = function(){
 	}
 	
 	this.start = function(){
+		timer = maxTime;
+		if(timerInterval) window.clearInterval(timerInterval);
 		timerInterval = window.setInterval(timerUpdate, 1000);
 	}
 	
 	function timerUpdate(){
-		timer++;
-		if(timer>maxTime){
+		timer--;
+		if(timer==0){
 			window.clearInterval(timerInterval);
 			alert("Time's up!");	
 		}else{

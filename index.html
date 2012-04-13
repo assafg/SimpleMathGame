@@ -5,7 +5,7 @@
 <title>Yulav's Math Game</title>
 <link href="jquery.mobile-1.0a3.min.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" type="text/css" href="css/style.css">
-<script src="jquery-1.5.min.js" type="text/javascript"></script>
+<script src="jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src="jquery.mobile-1.0a3.min.js" type="text/javascript"></script>
 <!-- This reference to phonegap.js will allow for code hints as long as the current site has been configured as a mobile application. 
 	 To configure the site as a mobile application, go to Site -> Mobile Applications -> Configure Application Framework... -->
@@ -32,12 +32,19 @@
 	</div>
     <div data-role="content">
     	<div id="topPanel">
-        	 <div id="startBtn" data-role="button" data-inline="true">Start</div><span data-role="button" id="timer" data-inline="true"  data-theme="c"><span id="timerText">0</span>
+        	 <div id="startBtn" data-role="button" data-inline="true">Start</div><span data-role="button" id="timer" data-inline="true"  data-theme="c"><span id="timerText">60</span></span>
+             <span data-role="button" id="correctLbl" data-inline="true" data-icon="check" data-theme="c"><span id="correctTxt">0</span></span>
+              
         </div>
     	<div id="gamePane">
-            <span id="question"></span>
-            <span id="answer_div"><input type="number" id="answer"></span><div id="checkBtn" data-role="button" data-inline="true">Check?</div>
-            <!--<div id="buttons">
+        	<table>
+            	<tr>
+                	<td><span id="question"></span></td>
+                    <td><span id="answer_div"><input type="text" id="answer"></span></td>
+                </tr>
+            </table>
+            <!--<div id="checkBtn" data-role="button" data-inline="true">Check?</div>
+            <div id="buttons">
                 <div id="newQuestionBtn" data-role="button" data-inline="true">Next</div>
             </div>-->
     	<div id="resultPane">
@@ -51,28 +58,46 @@ $(document).ready(function(e) {
 	var m = new MathGame();
 	var result;
 	$('#timer').hide();
+	$('#correctLbl').hide();
 	$('#timer').attr("disabled","disabled");
+	$('#correctLbl').attr("disabled","disabled");
+	
+	var correctCounter = 0;
     m.init(updateTimer);
-	var err = new Audio("snd/error.wav");
-	var correct = new Audio("snd/correct.wav");
+	//var err = new Audio("snd/error.mp3");
+	var correct = new Audio("snd/button-19.mp3");
 	//$("#newQuestionBtn").click(generateQuestion);
-	$("#checkBtn").click(function(){
-		if(Number($("#answer").val()) == Number(result)){
-			$("#resultPane").css("background-color","#093");
-			$("#resultPane").show(10);
-			correct.play();
-			generateQuestion();
-		}else{
-			$("#resultPane").css("background-color","#C00");
-			$("#resultPane").show(10);
-			err.play();
-		}
-	});
+	//$("#checkBtn").click();
 	$("#startBtn").click(function(){
 		$('#timer').show();
-		m.start();
+		$('#correctLbl').show();
+	    m.start();
+		$('#correctTxt').html('0');
+		$('#timerText').html('60');
+		
 		generateQuestion();
 	});
+	
+	//$("#answer").change(check);
+	$("#answer").keyup(function(){
+		check();
+	});
+	
+	var check = function(){
+		if(Number($("#answer").val()) == Number(result)){
+			//$("#resultPane").css("background-color","#093");
+			//$("#resultPane").show(10);
+			$("#answer").val('');
+			correct.play();
+			correctCounter++;
+			$('#correctTxt').html(correctCounter);
+			generateQuestion();
+		}else{
+			//$("#resultPane").css("background-color","#C00");
+			//$("#resultPane").show(10);
+			//err.play();
+		}
+	}
 	
 	var generateQuestion = function(){
 		$("#resultPane").hide();
