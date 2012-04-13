@@ -1,0 +1,93 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="utf-8">
+<title>Yulav's Math Game</title>
+<link href="jquery.mobile-1.0a3.min.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script src="jquery-1.5.min.js" type="text/javascript"></script>
+<script src="jquery.mobile-1.0a3.min.js" type="text/javascript"></script>
+<!-- This reference to phonegap.js will allow for code hints as long as the current site has been configured as a mobile application. 
+	 To configure the site as a mobile application, go to Site -> Mobile Applications -> Configure Application Framework... -->
+<script src="/phonegap.js" type="text/javascript"></script>
+<script src="js/game.js" type="text/javascript"></script>
+</head> 
+<body> 
+
+<div data-role="page" id="page" data-theme="b">
+	<div data-role="header" data-theme="b">
+		<h1>Math Game</h1>
+	</div>
+	<div data-role="content" data-theme="b">	
+		<a href="#page2" data-role="button" data-theme="b">Play</a>
+	</div>
+	<div data-role="footer" data-position="fixed">
+		<h4>powered by Assaf</h4>
+	</div>
+</div>
+
+<div data-role="page" id="page2" data-theme="b">
+	<div data-role="header">
+		<h1>Good Luck</h1>
+	</div>
+    <div data-role="content">
+    	<div id="topPanel">
+        	 <div id="startBtn" data-role="button" data-inline="true">Start</div><span data-role="button" id="timer" data-inline="true"  data-theme="c"><span id="timerText">0</span>
+        </div>
+    	<div id="gamePane">
+            <span id="question"></span>
+            <span id="answer_div"><input type="number" id="answer"></span><div id="checkBtn" data-role="button" data-inline="true">Check?</div>
+            <!--<div id="buttons">
+                <div id="newQuestionBtn" data-role="button" data-inline="true">Next</div>
+            </div>-->
+    	<div id="resultPane">
+    	</div>
+    </div>
+	
+</div>
+
+<script>
+$(document).ready(function(e) {
+	var m = new MathGame();
+	var result;
+	$('#timer').hide();
+	$('#timer').attr("disabled","disabled");
+    m.init(updateTimer);
+	var err = new Audio("snd/error.wav");
+	var correct = new Audio("snd/correct.wav");
+	//$("#newQuestionBtn").click(generateQuestion);
+	$("#checkBtn").click(function(){
+		if(Number($("#answer").val()) == Number(result)){
+			$("#resultPane").css("background-color","#093");
+			$("#resultPane").show(10);
+			correct.play();
+			generateQuestion();
+		}else{
+			$("#resultPane").css("background-color","#C00");
+			$("#resultPane").show(10);
+			err.play();
+		}
+	});
+	$("#startBtn").click(function(){
+		$('#timer').show();
+		m.start();
+		generateQuestion();
+	});
+	
+	var generateQuestion = function(){
+		$("#resultPane").hide();
+		var q = m.getQuestion();
+		$("#answer").val('');
+		$("#question").html(q);
+		result = eval(q.substring(0,q.length-1));
+		$("#resultPane").hide();
+	}
+	
+	function updateTimer(){
+		$('#timerText').html("&nbsp;"+m.getTimer()+"&nbsp;");
+	}
+});
+</script>
+
+</body>
+</html>
