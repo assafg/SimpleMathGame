@@ -58,18 +58,20 @@ $(document).ready(function(e) {
 	var m = new MathGame();
 	var result;
 	$('#timer').hide();
+	$('#gamePane').hide();
 	$('#correctLbl').hide();
 	$('#timer').attr("disabled","disabled");
 	$('#correctLbl').attr("disabled","disabled");
 	
 	var correctCounter = 0;
-    m.init(updateTimer);
+    m.init(updateTimer,onGameOver);
 	//var err = new Audio("snd/error.mp3");
 	var correct = new Audio("snd/button-19.mp3");
 	//$("#newQuestionBtn").click(generateQuestion);
 	//$("#checkBtn").click();
 	$("#startBtn").click(function(){
 		$('#timer').show();
+		$('#gamePane').show();
 		$('#correctLbl').show();
 	    m.start();
 		$('#correctTxt').html('0');
@@ -106,6 +108,11 @@ $(document).ready(function(e) {
 		$("#question").html(q);
 		result = eval(q.substring(0,q.length-1));
 		$("#resultPane").hide();
+	}
+	
+	function onGameOver(){
+		$('#gamePane').hide();
+		alert("Time's up!");
 	}
 	
 	function updateTimer(){

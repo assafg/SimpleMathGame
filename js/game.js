@@ -4,6 +4,9 @@ var MathGame = function(){
 	var timerCB;
 	var operations = [];
 	var timerInterval;
+	
+	var handleGameOver;
+	
 	this.getQuestion = function(){
 		var op = operations[Math.floor(Math.random()*operations.length)];
 		var ok = false;
@@ -23,10 +26,11 @@ var MathGame = function(){
 		return question;
 	}
 	
-	this.init = function(timerCallback, setMaxTime){
+	this.init = function(timerCallback,onGameOver, setMaxTime){
 		operations.push(add);
 		operations.push(subtract);
 		timerCB = timerCallback;
+		handleGameOver = onGameOver;
 		maxTime = setMaxTime || 60;
 	}
 	
@@ -40,7 +44,7 @@ var MathGame = function(){
 		timer--;
 		if(timer<0){
 			window.clearInterval(timerInterval);
-			alert("Time's up!");	
+			handleGameOver();	
 		}else{
 			timerCB();	
 		}
