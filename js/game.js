@@ -38,7 +38,7 @@ var MathGame = function(){
 	
 	function timerUpdate(){
 		timer--;
-		if(timer==0){
+		if(timer<0){
 			window.clearInterval(timerInterval);
 			alert("Time's up!");	
 		}else{
